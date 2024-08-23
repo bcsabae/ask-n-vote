@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4">
+    <div class="py-4">
         <Card>
             <template #content>
                 <div class="flex justify-between">

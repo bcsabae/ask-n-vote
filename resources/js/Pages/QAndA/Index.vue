@@ -1,11 +1,14 @@
 <template>
-    <div>
-        <QuestionList
-            :questions="questions"
-            :upvoted="upvoted"
-            @upvote="upvoteQuestion"
-            @downvote="downvoteQuestion"
-        />
+    <div class="bg-gray-800 py-24">
+        <div class="w-3/5 flex flex-col mx-auto">
+            <SubmitQuestion @submit-question="createQuestion"/>
+            <QuestionList
+                :questions="questions"
+                :upvoted="upvoted"
+                @upvote="upvoteQuestion"
+                @downvote="downvoteQuestion"
+            />
+        </div>
     </div>
 </template>
 
@@ -21,7 +24,10 @@ export default {
     },
     methods: {
         createQuestion(questionText) {
-            // Send new question to API and update this.questions
+            console.log('need to crete question ' + questionText)
+            this.$inertia.post(route('questions.store'), {
+                'question_text': questionText,
+            })
         },
         upvoteQuestion(questionId) {
             this.$inertia.post(route('questions.upvote', questionId), {},{
