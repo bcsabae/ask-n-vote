@@ -9,7 +9,7 @@ class SessionController extends Controller
 {
     public function showLoginForm()
     {
-        return inertia('Login'); // Render Vue component for login
+        return inertia('QAndA/Start'); // Render Vue component for login
     }
 
     public function login(Request $request)
