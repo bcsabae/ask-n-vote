@@ -33,4 +33,5 @@ Route::middleware(QAndASessionAccessMiddleware::class)->group(function () {
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
     Route::post('/questions/{question}/upvote', [QuestionController::class, 'upvote'])->name('questions.upvote');
+    Route::put('/questions/{question}/upvote', [QuestionController::class, 'downvote'])->name('questions.downvote');
 });
