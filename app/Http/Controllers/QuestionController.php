@@ -7,59 +7,31 @@ use Illuminate\Http\Request;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $questions = Question::orderBy('upvotes', 'desc')->get();
+        return inertia('Questions/Index', compact('questions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'question_text' => 'required|string|max:255',
+        ]);
+
+        Question::create($request->only('question_text'));
+
+        return redirect()->route('questions.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Question $question)
+    public function upvote(Question $question)
     {
-        //
-    }
+        $upvoted = session()->get('upvoted', []);
+        if (!in_array($question->id, $upvoted)) {
+            $question->increment('upvotes');
+            session()->push('upvoted', $question->id);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Question $question)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Question $question)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Question $question)
-    {
-        //
+        return redirect()->route('questions.index');
     }
 }
