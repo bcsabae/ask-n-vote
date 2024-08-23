@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\SessionCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,10 +17,23 @@ class QuestionFactory extends Factory
      */
     public function definition(): array
     {
+        $sessionCode = SessionCode::first();
+
         return [
             'question_text' => fake()->sentence(),
             'upvotes' => fake()->numberBetween(0, 100),
-            'is_answered' => false
+            'is_answered' => false,
+            'asked_by' => fake()->userName,
+            'session_code_id' => $sessionCode->id,
         ];
+    }
+
+    public function forSession(SessionCode $sessionCode): Factory
+    {
+        return $this->state(function (array $attributes) use ($sessionCode) {
+            return [
+                'session_code_id' => $sessionCode->id,
+            ];
+        });
     }
 }

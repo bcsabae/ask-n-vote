@@ -14,7 +14,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Question::factory(20)->create();
         SessionCode::factory(3)->create();
+        foreach (SessionCode::all() as $session)
+        {
+            Question::factory()->forSession($session)->count(10)->create();
+        }
+
     }
 }

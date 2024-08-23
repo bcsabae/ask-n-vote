@@ -13,4 +13,9 @@ class SessionCode extends Model
         'session_code',
         'is_active',
     ];
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
 }

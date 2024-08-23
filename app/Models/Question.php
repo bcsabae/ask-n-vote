@@ -13,5 +13,12 @@ class Question extends Model
         'question_text',
         'upvotes',
         'is_answered',
+        'asked_by',
+        'session_code_id'
     ];
+
+    public function sessionCode()
+    {
+        return $this->belongsTo(SessionCode::class);
+    }
 }

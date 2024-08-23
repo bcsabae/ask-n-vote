@@ -13,6 +13,7 @@
                 :key="question.id"
                 :question="question"
                 :upvoted="upvoted.includes(question.id)"
+                :user-question="userQuestionList"
                 @upvote="handleUpvote"
                 @downvote="handleDownvote"
             />
@@ -27,7 +28,17 @@ export default {
     components: {
         QuestionItem,
     },
-    props: ['questions', 'upvoted'],
+    props: {
+        questions: Array,
+        upvoted: {
+            type: Array,
+            default: () => []
+        },
+        userQuestionList: {
+            type: Boolean,
+            default: () => false
+        }
+    },
     methods: {
         handleUpvote(questionId) {
             console.log("Upvote captured for " + questionId)
