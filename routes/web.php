@@ -32,6 +32,7 @@ Route::post('/start', [SessionController::class, 'login'])->name('q-and-a.login'
 Route::middleware(QAndASessionAccessMiddleware::class)->group(function () {
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+    Route::delete('/questions/{question}', [QuestionController::class, 'delete'])->name('questions.destroy');
     Route::post('/questions/{question}/upvote', [QuestionController::class, 'upvote'])->name('questions.upvote');
     Route::put('/questions/{question}/upvote', [QuestionController::class, 'downvote'])->name('questions.downvote');
 });

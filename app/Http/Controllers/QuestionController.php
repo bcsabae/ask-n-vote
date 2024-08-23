@@ -46,6 +46,21 @@ class QuestionController extends Controller
         return redirect()->route('questions.index');
     }
 
+    public function delete(Question $question)
+    {
+        $name = session("name");
+        if ($question->asked_by != $name)
+        {
+            return back()->withErrors([
+                "question" => "You can only delete your questions"
+            ]);
+        }
+
+        $question->delete();
+
+        return back();
+    }
+
     public function upvote(Question $question)
     {
         $upvoted = session()->get('upvoted', []);

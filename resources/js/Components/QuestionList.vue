@@ -16,6 +16,7 @@
                 :user-question="userQuestionList"
                 @upvote="handleUpvote"
                 @downvote="handleDownvote"
+                @delete="handleDelete"
             />
         </transition-group>
     </div>
@@ -47,6 +48,10 @@ export default {
         handleDownvote(questionId) {
             console.log("Downvote captured for " + questionId)
             this.$emit('downvote', questionId);
+        },
+        handleDelete(questionId) {
+            console.log("Delete captured for " + questionId)
+            this.$emit('delete', questionId);
         }
     }
 };

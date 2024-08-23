@@ -12,9 +12,14 @@
                     <h2 class="text-2xl font-extrabold">Your questions</h2>
                 </div>
                 <QuestionList
+                    v-if="userQuestions.length"
                     :questions="userQuestions"
                     :user-question-list="true"
+                    @delete="deleteQuestion"
                 />
+                <p v-else class="italic text-gray-500">
+                    Your questions will appear here.
+                </p>
             </div>
 
             <div class="py-6">
@@ -59,6 +64,11 @@ export default {
         },
         downvoteQuestion(questionId) {
             this.$inertia.put(route('questions.downvote', questionId), {},{
+                preserveScroll: true
+            });
+        },
+        deleteQuestion(questionId) {
+            this.$inertia.delete(route('questions.destroy', questionId), {
                 preserveScroll: true
             });
         }
