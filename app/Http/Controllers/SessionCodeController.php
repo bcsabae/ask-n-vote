@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SessionCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class SessionCodeController extends Controller
@@ -33,7 +34,17 @@ class SessionCodeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        do {
+            $code = Str::upper(Str::random(6));
+        }
+        while (SessionCode::where('session_code', $code)->exists());
+
+        SessionCode::create([
+            "session_code" => $code,
+            "is_active" => true
+        ]);
+
+        return back();
     }
 
     /**

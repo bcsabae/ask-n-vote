@@ -24,6 +24,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/sessions', [SessionCodeController::class, 'index'])->name('sessions');
     Route::patch('/sessions/{session_code}', [SessionCodeController::class, 'update'])->name('sessions.update');
+    Route::post('/sessions', [SessionCodeController::class, 'store'])->name('sessions.new');
 });
 
 Route::get('/start', [SessionController::class, 'showLoginForm'])->name('q-and-a.login.form');
