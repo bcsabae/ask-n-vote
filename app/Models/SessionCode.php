@@ -18,4 +18,11 @@ class SessionCode extends Model
     {
         return $this->hasMany(Question::class);
     }
+
+    protected static function booted()
+    {
+        static::deleting(function(SessionCode $sessionCode) {
+            $sessionCode->questions()->delete();
+        });
+    }
 }

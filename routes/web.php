@@ -25,6 +25,7 @@ Route::middleware([
     Route::get('/sessions', [SessionCodeController::class, 'index'])->name('sessions');
     Route::patch('/sessions/{session_code}', [SessionCodeController::class, 'update'])->name('sessions.update');
     Route::post('/sessions', [SessionCodeController::class, 'store'])->name('sessions.new');
+    Route::delete('/sessions/{session_code}', [SessionCodeController::class, 'destroy'])->name('sessions.destroy');
 });
 
 Route::get('/start', [SessionController::class, 'showLoginForm'])->name('q-and-a.login.form');

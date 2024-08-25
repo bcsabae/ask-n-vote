@@ -90,6 +90,8 @@ class SessionCodeController extends Controller
      */
     public function destroy(SessionCode $sessionCode)
     {
-        //
+        $sessionCode->delete();
+
+        return back();
     }
 }
