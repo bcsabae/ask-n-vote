@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\SessionCode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 
 class SessionCodeController extends Controller
 {
@@ -12,7 +14,10 @@ class SessionCodeController extends Controller
      */
     public function index()
     {
-        //
+        $sessions = SessionCode::all();
+        return Inertia::render('Sessions', [
+            "session_codes" => $sessions
+        ]);
     }
 
     /**
@@ -52,7 +57,21 @@ class SessionCodeController extends Controller
      */
     public function update(Request $request, SessionCode $sessionCode)
     {
-        //
+        $validated = $request->validate([
+            "is_active" => "nullable|boolean",
+            "session_code" => "nullable|string|min:6|max:6"
+        ]);
+
+        $data = [
+            "is_active" => $validated["is_active"] ?? $sessionCode->is_active,
+            "session_code" => $validated["session_code"] ?? $sessionCode->session_code,
+        ];
+
+        $sessionCode->update($data);
+
+        $sessionCode->save();
+
+        return back();
     }
 
     /**

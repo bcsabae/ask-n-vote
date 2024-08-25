@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\SessionCodeController;
 use App\Http\Controllers\QuestionController;
 use \App\Http\Middleware\QAndASessionAccessMiddleware;
 
@@ -21,9 +22,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/sessions', [SessionCodeController::class, 'index'])->name('sessions');
+    Route::patch('/sessions/{session_code}', [SessionCodeController::class, 'update'])->name('sessions.update');
 });
 
 Route::get('/start', [SessionController::class, 'showLoginForm'])->name('q-and-a.login.form');
