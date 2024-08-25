@@ -34,10 +34,10 @@ const logout = () => {
 
         <Banner />
 
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-800">
+        <div class="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-800">
             <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
@@ -167,17 +167,23 @@ const logout = () => {
                 </div>
             </nav>
 
-            <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
-                </div>
-            </header>
+            <div class="flex-grow lg:mx-16 lg:my-8 my-4 mx-6 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200 shadow">
+                <div class="rounded-xl px-4 py-2">
+                    <!-- Page Heading -->
+                    <header v-if="$slots.header" class="">
+                        <div class="mx-auto py-6 text-3xl mb-8 border-b border-gray-200 dark:border-gray-800">
+                            <h2 class="font-bold text-2xl">
+                                <slot name="header" />
+                            </h2>
+                        </div>
+                    </header>
 
-            <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
+                    <!-- Page Content -->
+                    <main>
+                        <slot />
+                    </main>
+                </div>
+            </div>
         </div>
     </div>
 </template>
