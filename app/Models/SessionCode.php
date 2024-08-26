@@ -26,10 +26,16 @@ class SessionCode extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function guests()
+    {
+        return $this->hasMany(Guest::class);
+    }
+
     protected static function booted()
     {
         static::deleting(function(SessionCode $sessionCode) {
             $sessionCode->questions()->delete();
+            $sessionCode->guests()->delete();
         });
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Guest;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,20 @@ class QAndASessionAccessMiddleware
     {
         if(Auth::check()) return $next($request);
 
-        if (!$request->session()->has('session_code') || !$request->session()->has('name')) {
+        if (!$request->session()->has('guest_id')) {
             return redirect()->route('q-and-a.login.form');
+        }
+
+        $guest = Guest::find(session('guest_id'));
+
+        if ($guest == null) {
+            session()->forget('guest_id');
+            session()->flash('guest_message', 'Your session has expired. Please log in again.');
+            return redirect()->route('q-and-a.login.form');
+        }
+
+        if ($guest->banned) {
+            abort(403);
         }
 
         return $next($request);

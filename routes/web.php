@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\SessionController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SessionCodeController;
 use App\Http\Controllers\QuestionController;
 use \App\Http\Middleware\QAndASessionAccessMiddleware;
@@ -31,8 +31,8 @@ Route::middleware([
     Route::patch('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
 });
 
-Route::get('/start', [SessionController::class, 'showLoginForm'])->name('q-and-a.login.form');
-Route::post('/start', [SessionController::class, 'login'])->name('q-and-a.login');
+Route::get('/start', [GuestController::class, 'create'])->name('q-and-a.login.form');
+Route::post('/start', [GuestController::class, 'store'])->name('q-and-a.login');
 
 Route::middleware(QAndASessionAccessMiddleware::class)->group(function () {
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');

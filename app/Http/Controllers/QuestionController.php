@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guest;
 use App\Models\Question;
-use App\Models\SessionCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class QuestionController extends Controller
 {
     public function index()
     {
-        $name = session("name");
+        $guest = Guest::findOrFail(session("guest_id"));
+        $name = $guest->name;
+
         $userQuestions = Question::where('asked_by', $name)->orderBy('created_at', 'desc')->get();
         $otherQuestions = Question::where('asked_by', '!=', $name)->orderBy('upvotes', 'desc')->get();
+
         $upvoted = session()->get('upvoted', []);
         return Inertia::render('QAndA/Index', [
             'questions' => $otherQuestions,
@@ -27,16 +29,17 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
+        $guest = Guest::find(session("guest_id"));
         $validated = $request->validate([
             'question_text' => 'required|string|max:255',
-            'asked_by' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) use ($request) {
-                if ($value !== $request->session()->get('name')) {
+            'asked_by' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) use ($request, $guest) {
+                if ($value !== $guest->name) {
                     $fail('You can only post questions for yourself.');
                 }
             }],
         ]);
 
-        $sessionCode = SessionCode::where('session_code', session('session_code'))->firstOrFail();
+        $sessionCode = $guest->sessionCode;
 
         Question::create([
             'question_text' => $validated['question_text'],
@@ -44,7 +47,7 @@ class QuestionController extends Controller
             'session_code_id' => $sessionCode->id,
         ]);
 
-        return redirect()->route('questions.index');
+        return back();
     }
 
     public function delete(Question $question)
@@ -52,7 +55,9 @@ class QuestionController extends Controller
         $shouldAllow = false;
 
         if (Auth::id() == $question->sessionCode->user_id) $shouldAllow = true;
-        if ($question->asked_by == session("name", "")) $shouldAllow = true;
+
+        $guest = Guest::find(session("guest_id"));
+        if ($question->asked_by == $guest->name) $shouldAllow = true;
 
         if (!$shouldAllow) abort(403);
 
