@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use const http\Client\Curl\AUTH_ANY;
 
 class SessionCodeController extends Controller
 {
@@ -28,15 +29,19 @@ class SessionCodeController extends Controller
      */
     public function view(SessionCode $sessionCode)
     {
+        if(Auth::user()->cannot('view', $sessionCode)) abort(403);
+
         $active_questions = $sessionCode->questions()->where('is_answered', false)
             ->orderBy('upvotes', 'desc')->get();
         $answered_questions = $sessionCode->questions()->where('is_answered', true)
             ->orderBy('updated_at', 'desc')->get();
+        $guests = $sessionCode->guests();
 
         return Inertia::render('SessionDashboard', [
             "session_code" => $sessionCode,
             "active_questions" => $active_questions,
             "answered_questions" => $answered_questions,
+            "guests" => $guests,
         ]);
     }
 
