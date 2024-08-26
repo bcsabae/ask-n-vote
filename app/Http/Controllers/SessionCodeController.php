@@ -23,18 +23,12 @@ class SessionCodeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        if(Auth::user()->cannot('create', SessionCode::class)) abort(403);
+
         $validated = $request->validate([
             "title" => "nullable|string|max:256"
         ]);
@@ -63,26 +57,12 @@ class SessionCodeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(SessionCode $sessionCode)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SessionCode $sessionCode)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, SessionCode $sessionCode)
     {
+        if(Auth::user()->cannot('update', $sessionCode)) abort(403);
+
         $validated = $request->validate([
             "is_active" => "nullable|boolean",
             "session_code" => "nullable|string|min:6|max:6",
@@ -107,6 +87,8 @@ class SessionCodeController extends Controller
      */
     public function destroy(SessionCode $sessionCode)
     {
+        if(Auth::user()->cannot('delete', $sessionCode)) abort(403);
+
         $sessionCode->delete();
 
         return back();

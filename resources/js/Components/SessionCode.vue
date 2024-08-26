@@ -52,7 +52,7 @@ function emitUpdateTitle() {
         console.log("original: " + props.title + " modified: " + titleToEdit.value)
         emit('update:title', {
             id: props.id,
-            title: titleToEdit,
+            title: titleToEdit.value,
         })
     }
 }
