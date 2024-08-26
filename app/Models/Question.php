@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UnbannedQuestionsScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 
+#[ScopedBy([UnbannedQuestionsScope::class])]
 class Question extends Model
 {
     use HasFactory;

@@ -29,6 +29,7 @@ Route::middleware([
     Route::get('/sessions/{session_code}', [SessionCodeController::class, 'view'])->name('sessions.dashboard');
 
     Route::patch('/questions/{question}', [QuestionController::class, 'update'])->name('questions.update');
+    Route::patch('/guest/{guest}', [GuestController::class, 'ban'])->name('guest.ban');
 });
 
 Route::get('/start', [GuestController::class, 'create'])->name('q-and-a.login.form');

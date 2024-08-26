@@ -35,13 +35,15 @@ class SessionCodeController extends Controller
             ->orderBy('upvotes', 'desc')->orderBy('question_text')->get();
         $answered_questions = $sessionCode->questions()->where('is_answered', true)->with('guest')
             ->orderBy('updated_at', 'desc')->orderBy('question_text')->get();
-        $guests = $sessionCode->guests();
+        $guests = $sessionCode->guests()->where('banned', false)->get();
+        $bannedGuests = $sessionCode->guests()->where('banned', true)->get();
 
         return Inertia::render('SessionDashboard', [
             "session_code" => $sessionCode,
             "active_questions" => $active_questions,
             "answered_questions" => $answered_questions,
             "guest_count" => $guests->count(),
+            "banned_guests" => $bannedGuests,
         ]);
     }
 

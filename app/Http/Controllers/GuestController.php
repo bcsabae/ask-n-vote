@@ -54,12 +54,16 @@ class GuestController extends Controller
         return redirect()->route('questions.index');
     }
 
-    public function ban(Guest $guest, $unban = false)
+    public function ban(Request $request, Guest $guest)
     {
         if(! Auth::user()->sessionCodes()->where('id', $guest->sessionCode->id)->exists()) abort(403);
 
+        $validated = $request->validate([
+            "ban" => "required|boolean"
+        ]);
+
         $guest->update([
-            "banned" => !$unban
+            "banned" => $validated["ban"],
         ]);
         $guest->save();
 

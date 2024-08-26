@@ -39,7 +39,7 @@
                     <td class="px-6 py-2">{{ question.question_text }}</td>
                     <td class="px-6 py-2">
                         {{ question.guest.name }}
-                        <Button icon="pi pi-ban" v-tooltip.top="'ban user'" severity="secondary" text aria-label="Ban user" @click="banUser(question.asked_by)"/>
+                        <Button icon="pi pi-ban" v-tooltip.top="'ban user'" severity="secondary" text aria-label="Ban user" @click="banUser(question.guest.id)"/>
                     </td>
                     <td class="px-6 py-2">
                         <Button icon="pi pi-check" v-tooltip.top="'answer'" severity="secondary" text aria-label="Answer question" @click="answerQuestion(question.id)"/>
@@ -70,10 +70,32 @@
                     <td class="px-6 py-2">{{ question.question_text }}</td>
                     <td class="px-6 py-2">
                         {{ question.guest.name }}
-                        <Button icon="pi pi-ban" v-tooltip.top="'ban user'" severity="secondary" text aria-label="Ban user" @click="banUser(question.asked_by)"/>
+                        <Button icon="pi pi-ban" v-tooltip.top="'ban user'" severity="secondary" text aria-label="Ban user" @click="banUser(question.guest.id)"/>
                     </td>
                     <td class="px-6 py-2">
                         <Button icon="pi pi-undo" v-tooltip.top="'reopen'" severity="secondary" text aria-label="Reopen question" @click="reopenQuestion(question.id)"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-12">
+            <div class="w-full border-b-gray-800 border-b py-4 mb-8 text-2xl">
+                <h3>Banned guests</h3>
+            </div>
+
+            <table class="table-auto w-full text-left text-gray-500">
+                <thead class="uppercase">
+                <tr>
+                    <th class="px-6 py-4">Name</th>
+                    <th class="px-6 py-4">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="guest in banned_guests" :key="guest.id" class="dark:hover:bg-gray-700 hover:bg-gray-100">
+                    <td class="px-6 py-2">{{ guest.name }}</td>
+                    <td class="px-6 py-2">
+                        <Button icon="pi pi-undo" v-tooltip.top="'enable'" severity="secondary" text aria-label="Enable guest" @click="enableGuest(guest.id)"/>
                     </td>
                 </tr>
                 </tbody>
@@ -100,7 +122,13 @@ import {router} from "@inertiajs/vue3";
 import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {useConfirm} from "primevue/useconfirm";
 
-const props = defineProps(['session_code', 'active_questions', 'answered_questions', 'guest_count'])
+const props = defineProps([
+    'session_code',
+    'active_questions',
+    'answered_questions',
+    'guest_count',
+    'banned_guests'
+])
 const confirm = useConfirm()
 
 let localIsActive = ref(props.session_code.is_active === 1)
@@ -141,8 +169,21 @@ function deleteSession() {
     })
 }
 
-function banUser(user) {
-    console.log("need to ban " + user)
+function banUser(userId) {
+    console.log("banning " + userId)
+    router.patch(route('guest.ban', userId), {
+        ban: true
+    }, {
+        preserveScroll: true
+    })
+}
+
+function enableUser(userId) {
+    router.patch(route('guest.ban', userId), {
+        ban: false
+    }, {
+        preserveScroll: true
+    })
 }
 
 function answerQuestion(questionId) {
