@@ -97,13 +97,14 @@ import Button from "primevue/button";
 import ToggleButton from "primevue/togglebutton";
 import ConfirmDialog from "primevue/confirmdialog";
 import {router} from "@inertiajs/vue3";
-import { ref, watch } from 'vue';
+import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {useConfirm} from "primevue/useconfirm";
 
 const props = defineProps(['session_code', 'active_questions', 'answered_questions', 'guest_count'])
-const confirm = useConfirm();
+const confirm = useConfirm()
 
-let localIsActive = ref(props.session_code.is_active === 1);
+let localIsActive = ref(props.session_code.is_active === 1)
+let updateInterval = ref()
 
 watch(
     () => props.session_code.is_active,
@@ -112,6 +113,16 @@ watch(
         localIsActive = (newVal === 1)
     }
 )
+
+onMounted(() => {
+    updateInterval = setInterval(() => {
+        updateData();
+    }, 3000);
+})
+
+onBeforeUnmount(() => {
+    clearInterval(updateInterval);
+})
 
 function toggleActive() {
     router.patch(route('sessions.update', props.session_code.id), {
@@ -154,6 +165,13 @@ function reopenQuestion(questionId) {
     }, {
         preserveScroll: true
     })
+}
+
+function updateData() {
+     router.reload({
+        preserveState: true ,
+        preserveScroll: true }
+    )
 }
 
 const showDeleteConfirmation = () => {

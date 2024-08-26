@@ -32,9 +32,9 @@ class SessionCodeController extends Controller
         if(Auth::user()->cannot('view', $sessionCode)) abort(403);
 
         $active_questions = $sessionCode->questions()->where('is_answered', false)->with('guest')
-            ->orderBy('upvotes', 'desc')->get();
+            ->orderBy('upvotes', 'desc')->orderBy('question_text')->get();
         $answered_questions = $sessionCode->questions()->where('is_answered', true)->with('guest')
-            ->orderBy('updated_at', 'desc')->get();
+            ->orderBy('updated_at', 'desc')->orderBy('question_text')->get();
         $guests = $sessionCode->guests();
 
         return Inertia::render('SessionDashboard', [

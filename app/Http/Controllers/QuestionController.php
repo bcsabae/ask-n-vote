@@ -15,13 +15,21 @@ class QuestionController extends Controller
         $guest = Guest::findOrFail(session("guest_id"));
         $name = $guest->name;
 
-        $userQuestions = $guest->questions()->orderBy('created_at', 'desc')->get();
-        $otherQuestions = $guest->sessionCode->questions()->where('guest_id', '!=', $guest->id)
-            ->orderBy('upvotes', 'desc')->with('guest')->get();
+        $userQuestions = $guest->questions()->orderBy('created_at', 'desc')->orderBy('question_text')->get();
+
+        $answeredQuestions = $guest->sessionCode->questions()->where('guest_id', '!=', $guest->id)
+            ->where('is_answered', true)
+            ->orderBy('upvotes', 'desc')->orderBy('question_text')
+            ->with('guest')->get();
+        $unansweredQuestions = $guest->sessionCode->questions()->where('guest_id', '!=', $guest->id)
+            ->where('is_answered', false)
+            ->orderBy('upvotes', 'desc')->orderBy('question_text')
+            ->with('guest')->get();
 
         $upvoted = session()->get('upvoted', []);
         return Inertia::render('QAndA/Index', [
-            'questions' => $otherQuestions,
+            'answeredQuestions' => $answeredQuestions,
+            'unansweredQuestions' => $unansweredQuestions,
             'userQuestions' => $userQuestions,
             'upvoted' => $upvoted,
             'name' => $name,

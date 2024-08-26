@@ -27,7 +27,19 @@
                     <h2 class="text-2xl font-extrabold">Other's questions</h2>
                 </div>
                 <QuestionList
-                    :questions="questions"
+                    :questions="unansweredQuestions"
+                    :upvoted="upvoted"
+                    @upvote="upvoteQuestion"
+                    @downvote="downvoteQuestion"
+                />
+            </div>
+
+            <div class="py-6">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-extrabold">Answered questions</h2>
+                </div>
+                <QuestionList
+                    :questions="answeredQuestions"
                     :upvoted="upvoted"
                     @upvote="upvoteQuestion"
                     @downvote="downvoteQuestion"
@@ -44,7 +56,8 @@ import QuestionList from '../../Components/QuestionList.vue';
 export default {
     components: { SubmitQuestion, QuestionList },
     props: {
-        questions: Array,
+        unansweredQuestions: Array,
+        answeredQuestions: Array,
         userQuestions: Array,
         upvoted: Array,
         name: String,
@@ -69,7 +82,21 @@ export default {
             this.$inertia.delete(route('questions.destroy', questionId), {
                 preserveScroll: true
             });
-        }
+        },
+        updateData() {
+            this.$inertia.reload({
+                preserveState: true ,
+                preserveScroll: true }
+            )
+        },
+    },
+    created() {
+        this.interval = setInterval(function () {
+            this.updateData();
+        }.bind(this), 3000);
+    },
+    beforeDestroy() {
+        clearInterval(this.interval);
     }
 };
 </script>

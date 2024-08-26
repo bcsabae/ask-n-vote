@@ -6,12 +6,14 @@
                     <div class="flex items-center justify-center">
                         <div class="my-auto">
                             <p v-if="!userQuestion" class="text-gray-500 italic mb-2 text-sm">asked by {{ question.guest.name }}</p>
-                            <p v-else
+                            <p v-else-if="!question.is_answered"
                                @click="deleteUserQuestion"
                                class="text-gray-500 italic mb-2 text-sm hover:underline hover:cursor-pointer">
                                 Revoke this question
                             </p>
-                            <h3 class="font-black text-2xl">{{ question.question_text }}</h3>
+                            <h3 class="font-black text-2xl">
+                                {{ question.question_text + (question.is_answered ? " (answered)" : "")}}
+                            </h3>
                         </div>
                     </div>
                     <div class="gap-4 mt-1 flex justify-end">
@@ -23,7 +25,7 @@
                                 :outlined="!upvoted"
                                 aria-label="Upvote"
                                 @click="upvote"
-                                :disabled="userQuestion"/>
+                                :disabled="userQuestion || question.is_answered"/>
                             <p class="pt-2 text-center">
                                 {{ question.upvotes }}
                             </p>
