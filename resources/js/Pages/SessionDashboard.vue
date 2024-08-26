@@ -8,6 +8,7 @@
             <p class="font-bold text-xl">
                 Code: {{ session_code.session_code }}
             </p>
+
             <div class="flex flex-row gap-x-4 items-center">
                 <div class="text-sm">
                     <ToggleButton
@@ -16,35 +17,38 @@
                 <Button icon="pi pi-times" severity="secondary" text rounded aria-label="Delete" @click="showDeleteConfirmation"/>
             </div>
         </div>
+        <p class="font-bold text-xl">
+            Guests in session: {{ guest_count }}
+        </p>
 
         <div class="mt-12">
             <div class="w-full border-b-gray-800 border-b py-4 mb-8 text-2xl">
                 <h3>Active questions</h3>
             </div>
 
-            <table class="table-auto w-full text-left">
-                <thead class="uppercase">
-                    <tr>
-                        <th class="px-6 py-4">Upvotes</th>
-                        <th class="px-6 py-4">Text</th>
-                        <th class="px-6 py-4">Asked by</th>
-                        <th class="px-6 py-4">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="question in active_questions" :key="question.id" class="dark:hover:bg-gray-700 hover:bg-gray-100">
-                        <td class="px-6 py-2">{{ question.upvotes }}</td>
-                        <td class="px-6 py-2">{{ question.question_text }}</td>
-                        <td class="px-6 py-2">
-                            {{ question.asked_by }}
-                            <Button icon="pi pi-ban" v-tooltip.top="'ban user'" severity="secondary" text aria-label="Ban user" @click="banUser(question.asked_by)"/>
-                        </td>
-                        <td class="px-6 py-2">
-                            <Button icon="pi pi-check" v-tooltip.top="'answer'" severity="secondary" text aria-label="Answer question" @click="answerQuestion(question.id)"/>
-                            <Button icon="pi pi-times" v-tooltip.top="'delete'" severity="secondary" text aria-label="Delete question" @click="deleteQuestion(question.id)"/>
-                        </td>
-                    </tr>
-                </tbody>
+                        <table class="table-auto w-full text-left">
+                            <thead class="uppercase">
+                            <tr>
+                                <th class="px-6 py-4">Upvotes</th>
+                                <th class="px-6 py-4">Text</th>
+                                <th class="px-6 py-4">Asked by</th>
+                                <th class="px-6 py-4">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="question in active_questions" :key="question.id" class="dark:hover:bg-gray-700 hover:bg-gray-100">
+                                <td class="px-6 py-2">{{ question.upvotes }}</td>
+                                <td class="px-6 py-2">{{ question.question_text }}</td>
+                                <td class="px-6 py-2">
+                                    {{ question.asked_by }}
+                                    <Button icon="pi pi-ban" v-tooltip.top="'ban user'" severity="secondary" text aria-label="Ban user" @click="banUser(question.asked_by)"/>
+                                </td>
+                                <td class="px-6 py-2">
+                                    <Button icon="pi pi-check" v-tooltip.top="'answer'" severity="secondary" text aria-label="Answer question" @click="answerQuestion(question.id)"/>
+                                    <Button icon="pi pi-times" v-tooltip.top="'delete'" severity="secondary" text aria-label="Delete question" @click="deleteQuestion(question.id)"/>
+                                </td>
+                            </tr>
+                            </tbody>
 
 
             </table>
@@ -100,7 +104,7 @@ import {router} from "@inertiajs/vue3";
 import { ref, watch } from 'vue';
 import {useConfirm} from "primevue/useconfirm";
 
-const props = defineProps(['session_code', 'active_questions', 'answered_questions'])
+const props = defineProps(['session_code', 'active_questions', 'answered_questions', 'guest_count'])
 const confirm = useConfirm();
 
 let localIsActive = ref(props.session_code.is_active === 1);

@@ -41,7 +41,7 @@ class SessionCodeController extends Controller
             "session_code" => $sessionCode,
             "active_questions" => $active_questions,
             "answered_questions" => $answered_questions,
-            "guests" => $guests,
+            "guest_count" => $guests->count(),
         ]);
     }
 
