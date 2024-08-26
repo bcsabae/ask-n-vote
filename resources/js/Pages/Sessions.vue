@@ -20,7 +20,7 @@
         </p>
         <ConfirmDialog group="templating">
             <template #message="slotProps">
-                <div class="flex flex-row items-center text-gray-800 dark:text-gray-200">
+                <div class="flex flex-row items-center text-gray-200">
                     <i :class="slotProps.message.icon" class="py-2 px-4"></i>
                     <p>{{ slotProps.message.message }}</p>
                 </div>

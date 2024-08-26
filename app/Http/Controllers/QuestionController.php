@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Question;
 use App\Models\SessionCode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
@@ -48,13 +49,12 @@ class QuestionController extends Controller
 
     public function delete(Question $question)
     {
-        $name = session("name");
-        if ($question->asked_by != $name)
-        {
-            return back()->withErrors([
-                "question" => "You can only delete your questions"
-            ]);
-        }
+        $shouldAllow = false;
+
+        if (Auth::id() == $question->sessionCode->user_id) $shouldAllow = true;
+        if ($question->asked_by == session("name", "")) $shouldAllow = true;
+
+        if (!$shouldAllow) abort(403);
 
         $question->delete();
 
@@ -82,6 +82,24 @@ class QuestionController extends Controller
             }
             $question->decrement('upvotes');
         }
+
+        return back();
+    }
+
+    public function update(Request $request, Question $question)
+    {
+        if(Auth::id() !== $question->sessionCode->user_id) abort(403);
+
+        $validated = $request->validate([
+            'is_answered' => 'boolean'
+        ]);
+
+        $data = [
+            "is_answered" => $validated["is_answered"] ?? $question->is_answered,
+        ];
+
+        $question->update($data);
+        $question->save();
 
         return back();
     }

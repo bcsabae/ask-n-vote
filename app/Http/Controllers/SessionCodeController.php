@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\SessionCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,23 @@ class SessionCodeController extends Controller
         $sessions = SessionCode::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
         return Inertia::render('Sessions', [
             "session_codes" => $sessions
+        ]);
+    }
+
+    /**
+     * Display a single resource.
+     */
+    public function view(SessionCode $sessionCode)
+    {
+        $active_questions = $sessionCode->questions()->where('is_answered', false)
+            ->orderBy('upvotes', 'desc')->get();
+        $answered_questions = $sessionCode->questions()->where('is_answered', true)
+            ->orderBy('updated_at', 'desc')->get();
+
+        return Inertia::render('SessionDashboard', [
+            "session_code" => $sessionCode,
+            "active_questions" => $active_questions,
+            "answered_questions" => $answered_questions,
         ]);
     }
 
@@ -91,6 +109,6 @@ class SessionCodeController extends Controller
 
         $sessionCode->delete();
 
-        return back();
+        return redirect(route('sessions'));
     }
 }
