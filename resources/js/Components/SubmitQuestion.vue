@@ -4,7 +4,12 @@
             <template #content>
                 <div class="flex justify-between">
                     <div class="my-auto w-full pe-8">
-                        <InputText v-model="newQuestion" placeholder="Ask a question" class="w-full"/>
+                        <InputText
+                            v-model="newQuestion"
+                            :placeholder="active ? 'Ask a question' : 'This session does not accept questions at the moment'"
+                            class="w-full"
+                            :disabled="!active"
+                        />
                     </div>
                     <div class="">
                         <Button label="Ask" @click="submit" severity="secondary" :disabled="!(newQuestion.length)"/>
@@ -21,6 +26,9 @@ import Button from 'primevue/button';
 import Card from 'primevue/card';
 
 export default {
+    props: {
+        active: Boolean
+    },
     data() {
         return {
             newQuestion: ''

@@ -5,7 +5,7 @@
                 <div class="mb-12">
                     <h1 class="text-5xl font-extrabold">{{ name }}, welcome!</h1>
                 </div>
-                <SubmitQuestion @submit-question="createQuestion"/>
+                <SubmitQuestion @submit-question="createQuestion" :active="active"/>
             </div>
             <div class="py-6">
                 <div class="mb-4">
@@ -61,6 +61,7 @@ export default {
         userQuestions: Array,
         upvoted: Array,
         name: String,
+        active: Boolean,
     },
     methods: {
         createQuestion(questionText) {
@@ -86,8 +87,8 @@ export default {
         updateData() {
             this.$inertia.reload({
                 preserveState: true ,
-                preserveScroll: true }
-            )
+                preserveScroll: true,
+            })
         },
     },
     created() {

@@ -34,6 +34,7 @@ class QuestionController extends Controller
             'upvoted' => $upvoted,
             'name' => $name,
             'id' => $guest->id,
+            'active' => $guest->sessionCode->is_active,
         ]);
     }
 
