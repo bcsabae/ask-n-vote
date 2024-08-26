@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,9 +18,22 @@ class SessionCodeFactory extends Factory
      */
     public function definition(): array
     {
+        $user_id = User::first()->id;
+
         return [
             'session_code' => Str::upper(Str::random(6)),
-            'is_active' => true
+            'is_active' => true,
+            'title' => fake()->title(),
+            'user_id' => $user_id,
         ];
+    }
+
+    public function forUser(User $user): Factory
+    {
+        return $this->state(function (array $attributes) use ($user ) {
+            return [
+                'user_id' => $user->id,
+            ];
+        });
     }
 }

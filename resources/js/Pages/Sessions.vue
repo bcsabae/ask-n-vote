@@ -12,8 +12,10 @@
             <SessionCode :code="session_code.session_code"
                          :is-active="!!session_code.is_active"
                          :id="session_code.id"
+                         :title="session_code.title"
                          @update:isActive="handleIsActiveUpdate"
                          @delete-session="showDeleteConfirmation"
+                         @update:title="handleTitleUpdate"
             />
         </p>
         <ConfirmDialog group="templating">
@@ -43,6 +45,14 @@ const props = defineProps(['session_codes'])
 function handleIsActiveUpdate(data) {
     router.patch(route('sessions.update', data.id), {
         'is_active': data.is_active,
+    }, {
+        preserveScroll: true
+    })
+}
+
+function handleTitleUpdate(data) {
+    router.patch(route('sessions.update', data.id), {
+        'title': data.title
     }, {
         preserveScroll: true
     })

@@ -62,4 +62,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function sessionCodes()
+    {
+        return $this->hasMany(SessionCode::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function(User $user) {
+            $user->sessionCodes()->delete();
+        });
+    }
 }
