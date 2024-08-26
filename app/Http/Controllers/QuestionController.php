@@ -15,8 +15,9 @@ class QuestionController extends Controller
         $guest = Guest::findOrFail(session("guest_id"));
         $name = $guest->name;
 
-        $userQuestions = Question::where('asked_by', $name)->orderBy('created_at', 'desc')->get();
-        $otherQuestions = Question::where('asked_by', '!=', $name)->orderBy('upvotes', 'desc')->get();
+        $userQuestions = $guest->questions()->orderBy('created_at', 'desc')->get();
+        $otherQuestions = $guest->sessionCode->questions()->where('guest_id', '!=', $guest->id)
+            ->orderBy('upvotes', 'desc')->with('guest')->get();
 
         $upvoted = session()->get('upvoted', []);
         return Inertia::render('QAndA/Index', [
@@ -24,6 +25,7 @@ class QuestionController extends Controller
             'userQuestions' => $userQuestions,
             'upvoted' => $upvoted,
             'name' => $name,
+            'id' => $guest->id,
         ]);
     }
 
@@ -32,19 +34,11 @@ class QuestionController extends Controller
         $guest = Guest::find(session("guest_id"));
         $validated = $request->validate([
             'question_text' => 'required|string|max:255',
-            'asked_by' => ['required', 'string', 'max:255', function ($attribute, $value, $fail) use ($request, $guest) {
-                if ($value !== $guest->name) {
-                    $fail('You can only post questions for yourself.');
-                }
-            }],
         ]);
-
-        $sessionCode = $guest->sessionCode;
 
         Question::create([
             'question_text' => $validated['question_text'],
-            'asked_by' => $validated['asked_by'],
-            'session_code_id' => $sessionCode->id,
+            'guest_id' => $guest->id,
         ]);
 
         return back();

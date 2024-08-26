@@ -31,9 +31,9 @@ class SessionCodeController extends Controller
     {
         if(Auth::user()->cannot('view', $sessionCode)) abort(403);
 
-        $active_questions = $sessionCode->questions()->where('is_answered', false)
+        $active_questions = $sessionCode->questions()->where('is_answered', false)->with('guest')
             ->orderBy('upvotes', 'desc')->get();
-        $answered_questions = $sessionCode->questions()->where('is_answered', true)
+        $answered_questions = $sessionCode->questions()->where('is_answered', true)->with('guest')
             ->orderBy('updated_at', 'desc')->get();
         $guests = $sessionCode->guests();
 

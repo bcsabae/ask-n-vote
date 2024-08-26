@@ -51,10 +51,8 @@ export default {
     },
     methods: {
         createQuestion(questionText) {
-            console.log('need to crete question ' + questionText)
             this.$inertia.post(route('questions.store'), {
                 'question_text': questionText,
-                'asked_by': this.name,
             })
         },
         upvoteQuestion(questionId) {

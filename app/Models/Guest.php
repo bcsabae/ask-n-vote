@@ -19,4 +19,16 @@ class Guest extends Model
     {
         return $this->belongsTo(SessionCode::class);
     }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    protected static function booted()
+    {
+        static::deleting(function(Guest $guest) {
+            $guest->questions()->delete();
+        });
+    }
 }

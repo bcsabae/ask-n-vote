@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('question_text');
             $table->unsignedInteger('upvotes')->default(0);
             $table->boolean('is_answered')->default(false);
+            $table->unsignedBigInteger('guest_id');
+            $table->foreign('guest_id')->references('id')->on('guests');
         });
     }
 

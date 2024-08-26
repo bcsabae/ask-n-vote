@@ -18,7 +18,7 @@ class SessionCode extends Model
 
     public function questions()
     {
-        return $this->hasMany(Question::class);
+        return $this->hasManyThrough(Question::class, Guest::class);
     }
 
     public function user()
@@ -34,7 +34,6 @@ class SessionCode extends Model
     protected static function booted()
     {
         static::deleting(function(SessionCode $sessionCode) {
-            $sessionCode->questions()->delete();
             $sessionCode->guests()->delete();
         });
     }

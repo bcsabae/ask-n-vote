@@ -14,11 +14,16 @@ class Question extends Model
         'upvotes',
         'is_answered',
         'asked_by',
-        'session_code_id'
+        'guest_id'
     ];
+
+    public function guest()
+    {
+        return $this->belongsTo(Guest::class);
+    }
 
     public function sessionCode()
     {
-        return $this->belongsTo(SessionCode::class);
+        return $this->guest->sessionCode();
     }
 }

@@ -16,6 +16,9 @@ return new class extends Migration
             $table->timestamps();
             $table->string('session_code')->unique();
             $table->boolean('is_active')->default(true);
+            $table->string('title');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\SessionCode;
+use App\Models\Guest;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,22 +17,21 @@ class QuestionFactory extends Factory
      */
     public function definition(): array
     {
-        $sessionCode = SessionCode::first();
+        $guest = Guest::first();
 
         return [
             'question_text' => fake()->sentence(),
             'upvotes' => fake()->numberBetween(0, 100),
             'is_answered' => false,
-            'asked_by' => fake()->userName,
-            'session_code_id' => $sessionCode->id,
+            'guest_id' => fake()->userName,
         ];
     }
 
-    public function forSession(SessionCode $sessionCode): Factory
+    public function forGuest(Guest $guest): Factory
     {
-        return $this->state(function (array $attributes) use ($sessionCode) {
+        return $this->state(function (array $attributes) use ($guest) {
             return [
-                'session_code_id' => $sessionCode->id,
+                'guest_id' => $guest->id,
             ];
         });
     }

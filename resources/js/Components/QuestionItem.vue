@@ -5,7 +5,7 @@
                 <div class="flex justify-between">
                     <div class="flex items-center justify-center">
                         <div class="my-auto">
-                            <p v-if="!userQuestion" class="text-gray-500 italic mb-2 text-sm">asked by {{ question.asked_by }}</p>
+                            <p v-if="!userQuestion" class="text-gray-500 italic mb-2 text-sm">asked by {{ question.guest.name }}</p>
                             <p v-else
                                @click="deleteUserQuestion"
                                class="text-gray-500 italic mb-2 text-sm hover:underline hover:cursor-pointer">
