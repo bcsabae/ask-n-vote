@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-gray-800 py-12">
-        <div class="w-3/5 flex flex-col mx-auto">
+    <div class="bg-gray-800 sm:py-12">
+        <div class="lg:w-3/5 md:w-4/5 px-4 sm:px-8 md:px-0 flex flex-col mx-auto">
             <div class="py-12">
                 <div class="mb-12">
                     <h1 class="text-5xl font-extrabold">{{ name }}, welcome!</h1>
