@@ -82,9 +82,14 @@ const submit = () => {
                         Log in
                     </PrimaryButton>
                 </div>
-                <div class="my-0">
+                <div>
                     <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none">
                         forgot password
+                    </Link>
+                </div>
+                <div class="mt-2">
+                    <Link :href="route('register')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none">
+                        don't have an account yet?
                     </Link>
                 </div>
             </div>
