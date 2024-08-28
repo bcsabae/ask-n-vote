@@ -1,3 +1,28 @@
+<script setup>
+import Card from 'primevue/card';
+import Button from 'primevue/button';
+
+const props = defineProps({
+    question: Object,
+    upvoted: Boolean,
+    userQuestion: {
+        type: Boolean,
+        default: () => false
+    }
+})
+
+const emit = defineEmits(['upvote', 'delete'])
+
+function upvote() {
+    if(props.upvoted) emit('downvote', props.question.id);
+    else emit('upvote', props.question.id);
+}
+
+function deleteUserQuestion() {
+    emit('delete', props.question.id);
+}
+</script>
+
 <template>
     <div class="py-4">
         <Card>
@@ -36,32 +61,3 @@
         </Card>
     </div>
 </template>
-
-<script>
-import Card from 'primevue/card';
-import Button from 'primevue/button';
-
-export default {
-    props: {
-        question: Object,
-        upvoted: Boolean,
-        userQuestion: {
-            type: Boolean,
-            default: () => false
-        }
-    },
-    components: {
-        Card,
-        Button,
-    },
-    methods: {
-        upvote() {
-            if(this.upvoted) this.$emit('downvote', this.question.id);
-            else this.$emit('upvote', this.question.id);
-        },
-        deleteUserQuestion() {
-            this.$emit('delete', this.question.id);
-        }
-    }
-};
-</script>
