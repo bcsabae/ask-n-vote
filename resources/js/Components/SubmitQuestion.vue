@@ -20,33 +20,25 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
+import {ref} from "vue";
 
-export default {
-    props: {
-        active: Boolean
-    },
-    data() {
-        return {
-            newQuestion: ''
-        };
-    },
-    components: {
-        InputText,
-        Button,
-        Card,
-    },
-    methods: {
-        submit() {
-            if (this.newQuestion.length !== 0)
-            {
-                this.$emit('submit-question', this.newQuestion);
-                this.newQuestion = '';
-            }
-        }
+const props = defineProps({
+    active: Boolean
+})
+
+const emit = defineEmits(['submit-question'])
+
+const newQuestion = ref('')
+
+function submit() {
+    if (newQuestion.value.length !== 0)
+    {
+        emit('submit-question', newQuestion.value);
+        newQuestion.value = '';
     }
-};
+}
 </script>
