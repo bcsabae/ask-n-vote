@@ -49,6 +49,16 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url(env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
         ],
 
+        'mailpit' => [
+            'transport' => 'smtp',
+            'host' => 'mailpit',
+            'port' => '1025',
+            'encryption' => null,
+            'username' => null,
+            'password' => null,
+            'timeout' => 3,
+        ],
+
         'ses' => [
             'transport' => 'ses',
         ],
