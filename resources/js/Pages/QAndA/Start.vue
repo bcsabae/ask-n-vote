@@ -1,3 +1,19 @@
+<script setup>
+import {useForm} from '@inertiajs/vue3';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import FloatLabel from 'primevue/floatlabel';
+
+const form = useForm({
+    name: '',
+    session_code: '',
+});
+
+function submit() {
+    form.post('/start');
+}
+</script>
+
 <template>
     <div class="flex items-center justify-center min-h-screen">
         <div class="mx-auto lg:w-1/4 px-12">
@@ -26,30 +42,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import {useForm} from '@inertiajs/vue3';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
-import FloatLabel from 'primevue/floatlabel';
-
-export default {
-    components: {
-        InputText,
-        Button,
-        FloatLabel,
-    },
-    setup() {
-        const form = useForm({
-            name: '',
-            session_code: '',
-        });
-
-        function submit() {
-            form.post('/start');
-        }
-
-        return {form, submit};
-    },
-};
-</script>

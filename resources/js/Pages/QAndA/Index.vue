@@ -1,3 +1,62 @@
+<script setup>
+import SubmitQuestion from '../../Components/SubmitQuestion.vue';
+import QuestionList from '../../Components/QuestionList.vue';
+import {onBeforeUnmount, onMounted} from "vue";
+import { router } from '@inertiajs/vue3'
+
+const props = defineProps({
+    unansweredQuestions: Array,
+    answeredQuestions: Array,
+    userQuestions: Array,
+    upvoted: Array,
+    name: String,
+    active: Boolean,
+})
+
+let interval = null
+
+function createQuestion(questionText) {
+    router.post(route('questions.store'), {
+        'question_text': questionText,
+    })
+}
+
+function upvoteQuestion(questionId) {
+    router.post(route('questions.upvote', questionId), {},{
+        preserveScroll: true
+    });
+}
+
+function downvoteQuestion(questionId) {
+    router.put(route('questions.downvote', questionId), {},{
+        preserveScroll: true
+    });
+}
+
+function deleteQuestion(questionId) {
+    router.delete(route('questions.destroy', questionId), {
+        preserveScroll: true
+    });
+}
+
+function updateData() {
+    router.reload({
+        preserveState: true ,
+        preserveScroll: true,
+    })
+}
+
+onMounted(() => {
+    interval = setInterval(function () {
+        updateData();
+    }, 3000);
+})
+
+onBeforeUnmount(() => {
+    clearInterval(interval);
+})
+</script>
+
 <template>
     <div class="bg-gray-800 sm:py-12">
         <div class="lg:w-3/5 md:w-4/5 px-4 sm:px-8 md:px-0 flex flex-col mx-auto">
@@ -48,56 +107,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import SubmitQuestion from '../../Components/SubmitQuestion.vue';
-import QuestionList from '../../Components/QuestionList.vue';
-
-export default {
-    components: { SubmitQuestion, QuestionList },
-    props: {
-        unansweredQuestions: Array,
-        answeredQuestions: Array,
-        userQuestions: Array,
-        upvoted: Array,
-        name: String,
-        active: Boolean,
-    },
-    methods: {
-        createQuestion(questionText) {
-            this.$inertia.post(route('questions.store'), {
-                'question_text': questionText,
-            })
-        },
-        upvoteQuestion(questionId) {
-            this.$inertia.post(route('questions.upvote', questionId), {},{
-                preserveScroll: true
-            });
-        },
-        downvoteQuestion(questionId) {
-            this.$inertia.put(route('questions.downvote', questionId), {},{
-                preserveScroll: true
-            });
-        },
-        deleteQuestion(questionId) {
-            this.$inertia.delete(route('questions.destroy', questionId), {
-                preserveScroll: true
-            });
-        },
-        updateData() {
-            this.$inertia.reload({
-                preserveState: true ,
-                preserveScroll: true,
-            })
-        },
-    },
-    created() {
-        this.interval = setInterval(function () {
-            this.updateData();
-        }.bind(this), 3000);
-    },
-    beforeDestroy() {
-        clearInterval(this.interval);
-    }
-};
-</script>
