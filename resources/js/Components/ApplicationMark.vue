@@ -9,6 +9,6 @@ const altText = ref('AskNVote');
     <img
         :src="logoUrl"
         :alt="altText"
-        class="w-6 h-auto"
+        class=""
     />
 </template>

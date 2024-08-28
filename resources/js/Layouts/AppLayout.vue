@@ -50,7 +50,7 @@ const logout = () => {
 
                         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                             <div class="inline-flex items-center px-1 pt-1">
-                                <ThemeToggle />
+                                <ThemeToggle class="px-4" />
                             </div>
 
                             <form @submit.prevent="logout" class="items-center flex">
@@ -104,7 +104,7 @@ const logout = () => {
                             </button>
                         </form>
                         <div class="inline-flex items-center px-1 pt-1">
-                            <ThemeToggle :reverse="true" />
+                            <ThemeToggle :reverse="true" class="px-4" />
                         </div>
                     </div>
                 </div>

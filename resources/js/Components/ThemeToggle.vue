@@ -28,7 +28,7 @@ onMounted( () => {
 </script>
 
 <template>
-    <div class="flex gap-x-4 px-4" :class="{ 'flex-row-reverse': props.reverse }">
+    <div class="flex gap-x-4" :class="{ 'flex-row-reverse': props.reverse }">
         <div class="text-gray-900 dark:text-gray-100 text-sm">
             <p v-if="dark">dark</p>
             <p v-else>light</p>
