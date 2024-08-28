@@ -9,7 +9,7 @@
             move-class="transition ease-in-out duration-300"
         >
             <QuestionItem
-                v-for="question in questions"
+                v-for="question in props.questions"
                 :key="question.id"
                 :question="question"
                 :upvoted="upvoted.includes(question.id)"
@@ -22,37 +22,32 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import QuestionItem from './QuestionItem.vue';
 
-export default {
-    components: {
-        QuestionItem,
+const props = defineProps({
+    questions: Array,
+    upvoted: {
+        type: Array,
+        default: () => []
     },
-    props: {
-        questions: Array,
-        upvoted: {
-            type: Array,
-            default: () => []
-        },
-        userQuestionList: {
-            type: Boolean,
-            default: () => false
-        }
-    },
-    methods: {
-        handleUpvote(questionId) {
-            console.log("Upvote captured for " + questionId)
-            this.$emit('upvote', questionId);
-        },
-        handleDownvote(questionId) {
-            console.log("Downvote captured for " + questionId)
-            this.$emit('downvote', questionId);
-        },
-        handleDelete(questionId) {
-            console.log("Delete captured for " + questionId)
-            this.$emit('delete', questionId);
-        }
+    userQuestionList: {
+        type: Boolean,
+        default: () => false
     }
-};
+})
+
+const emit = defineEmits(['upvote', 'downvote', 'delete'])
+
+function handleUpvote(questionId) {
+    emit('upvote', questionId);
+}
+
+function handleDownvote(questionId) {
+    emit('downvote', questionId);
+}
+
+function handleDelete(questionId) {
+    emit('delete', questionId);
+}
 </script>
