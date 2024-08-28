@@ -1,9 +1,11 @@
 <template>
-    <div class="text-gray-900 dark:text-gray-100 px-4 text-sm">
-        <p v-if="dark">dark</p>
-        <p v-else>light</p>
+    <div class="flex gap-x-4 px-4" :class="{ 'flex-row-reverse': reverse }">
+        <div class="text-gray-900 dark:text-gray-100 text-sm">
+            <p v-if="dark">dark</p>
+            <p v-else>light</p>
+        </div>
+        <ToggleSwitch v-model="dark" @click="toggleTheme"/>
     </div>
-    <ToggleSwitch v-model="dark" @click="toggleTheme"/>
 </template>
 
 <script>
@@ -14,6 +16,9 @@ export default {
         return {
             dark: false
         }
+    },
+    props: {
+        reverse: Boolean
     },
     components: {
         ToggleSwitch,
