@@ -1,3 +1,130 @@
+<script setup>
+import AppLayout from '@/Layouts/AppLayout.vue';
+import Button from "primevue/button";
+import ToggleButton from "primevue/togglebutton";
+import ConfirmDialog from "primevue/confirmdialog";
+import {router} from "@inertiajs/vue3";
+import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import {useConfirm} from "primevue/useconfirm";
+
+const props = defineProps([
+    'session_code',
+    'active_questions',
+    'answered_questions',
+    'guest_count',
+    'banned_guests'
+])
+const confirm = useConfirm()
+
+let localIsActive = ref(props.session_code.is_active === 1)
+let updateInterval = ref()
+
+watch(
+    () => props.session_code.is_active,
+    (newVal) => {
+        console.log("changed to " + newVal)
+        localIsActive = (newVal === 1)
+    }
+)
+
+onMounted(() => {
+    updateInterval = setInterval(() => {
+        updateData();
+    }, 3000);
+})
+
+onBeforeUnmount(() => {
+    clearInterval(updateInterval);
+})
+
+function toggleActive() {
+    router.patch(route('sessions.update', props.session_code.id), {
+        'is_active': !props.session_code.is_active,
+    }, {
+        preserveScroll: true
+    })
+}
+
+function deleteSession() {
+    router.delete(route('sessions.destroy', props.session_code.id), {
+        preserveScroll:true,
+        onSuccess: () => {
+            router.visit(route('sessions'));
+        }
+    })
+}
+
+function banUser(userId) {
+    console.log("banning " + userId)
+    router.patch(route('guest.ban', userId), {
+        ban: true
+    }, {
+        preserveScroll: true
+    })
+}
+
+function enableUser(userId) {
+    router.patch(route('guest.ban', userId), {
+        ban: false
+    }, {
+        preserveScroll: true
+    })
+}
+
+function answerQuestion(questionId) {
+    router.patch(route('questions.update', questionId), {
+        'is_answered': true
+    }, {
+        preserveScroll: true
+    })
+}
+
+function deleteQuestion(questionId) {
+    router.delete(route('questions.destroy', questionId), {
+        preserveScroll: true
+    })
+}
+
+function reopenQuestion(questionId) {
+    router.patch(route('questions.update', questionId), {
+        'is_answered': false
+    }, {
+        preserveScroll: true
+    })
+}
+
+function updateData() {
+    router.reload({
+        preserveState: true ,
+        preserveScroll: true }
+    )
+}
+
+const showDeleteConfirmation = () => {
+    confirm.require({
+        group: 'templating',
+        header: 'Are you sure?',
+        message: 'You are going to delete this session. This cannot be undone.',
+        icon: 'pi pi-exclamation-circle',
+        rejectProps: {
+            label: 'Cancel',
+            outlined: true,
+            size: 'small',
+            severity: 'secondary',
+        },
+        acceptProps: {
+            label: 'Delete',
+            icon: 'pi pi-times',
+            size: 'small',
+            severity: 'danger',
+        },
+        accept: () => {
+            deleteSession()
+        },
+    });
+};
+</script>
+
 <template>
     <AppLayout title="Dashboard">
         <template #header>
@@ -112,130 +239,3 @@
     </AppLayout>
 
 </template>
-
-<script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import Button from "primevue/button";
-import ToggleButton from "primevue/togglebutton";
-import ConfirmDialog from "primevue/confirmdialog";
-import {router} from "@inertiajs/vue3";
-import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
-import {useConfirm} from "primevue/useconfirm";
-
-const props = defineProps([
-    'session_code',
-    'active_questions',
-    'answered_questions',
-    'guest_count',
-    'banned_guests'
-])
-const confirm = useConfirm()
-
-let localIsActive = ref(props.session_code.is_active === 1)
-let updateInterval = ref()
-
-watch(
-    () => props.session_code.is_active,
-    (newVal) => {
-        console.log("changed to " + newVal)
-        localIsActive = (newVal === 1)
-    }
-)
-
-onMounted(() => {
-    updateInterval = setInterval(() => {
-        updateData();
-    }, 3000);
-})
-
-onBeforeUnmount(() => {
-    clearInterval(updateInterval);
-})
-
-function toggleActive() {
-    router.patch(route('sessions.update', props.session_code.id), {
-        'is_active': !props.session_code.is_active,
-    }, {
-        preserveScroll: true
-    })
-}
-
-function deleteSession() {
-    router.delete(route('sessions.destroy', props.session_code.id), {
-        preserveScroll:true,
-        onSuccess: () => {
-            router.visit(route('sessions'));
-        }
-    })
-}
-
-function banUser(userId) {
-    console.log("banning " + userId)
-    router.patch(route('guest.ban', userId), {
-        ban: true
-    }, {
-        preserveScroll: true
-    })
-}
-
-function enableUser(userId) {
-    router.patch(route('guest.ban', userId), {
-        ban: false
-    }, {
-        preserveScroll: true
-    })
-}
-
-function answerQuestion(questionId) {
-    router.patch(route('questions.update', questionId), {
-        'is_answered': true
-    }, {
-        preserveScroll: true
-    })
-}
-
-function deleteQuestion(questionId) {
-    router.delete(route('questions.destroy', questionId), {
-        preserveScroll: true
-    })
-}
-
-function reopenQuestion(questionId) {
-    router.patch(route('questions.update', questionId), {
-        'is_answered': false
-    }, {
-        preserveScroll: true
-    })
-}
-
-function updateData() {
-     router.reload({
-        preserveState: true ,
-        preserveScroll: true }
-    )
-}
-
-const showDeleteConfirmation = () => {
-    confirm.require({
-        group: 'templating',
-        header: 'Are you sure?',
-        message: 'You are going to delete this session. This cannot be undone.',
-        icon: 'pi pi-exclamation-circle',
-        rejectProps: {
-            label: 'Cancel',
-            outlined: true,
-            size: 'small',
-            severity: 'secondary',
-        },
-        acceptProps: {
-            label: 'Delete',
-            icon: 'pi pi-times',
-            size: 'small',
-            severity: 'danger',
-        },
-        accept: () => {
-            deleteSession()
-        },
-    });
-};
-</script>
