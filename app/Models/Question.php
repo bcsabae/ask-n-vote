@@ -16,7 +16,6 @@ class Question extends Model
         'question_text',
         'upvotes',
         'is_answered',
-        'asked_by',
         'guest_id'
     ];
 

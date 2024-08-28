@@ -34,7 +34,7 @@ class QuestionController extends Controller
             'upvoted' => $upvoted,
             'name' => $name,
             'id' => $guest->id,
-            'active' => $guest->sessionCode->is_active,
+            'active' => (bool)$guest->sessionCode->is_active,
         ]);
     }
 
@@ -60,7 +60,7 @@ class QuestionController extends Controller
         if (Auth::id() == $question->sessionCode->user_id) $shouldAllow = true;
 
         $guest = Guest::find(session("guest_id"));
-        if ($question->asked_by == $guest->name) $shouldAllow = true;
+        if ($question->guest_id == $guest->id) $shouldAllow = true;
 
         if (!$shouldAllow) abort(403);
 
