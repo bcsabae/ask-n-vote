@@ -77,7 +77,7 @@ const logout = () => {
                                 <ThemeToggle />
                             </div>
 
-                            <CTA :href="route('home')" text="Get started" />
+                            <CTA :href="route('register')" text="Get started" />
                         </div>
 
                         <!-- Hamburger -->

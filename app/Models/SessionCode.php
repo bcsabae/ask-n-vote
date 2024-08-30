@@ -34,7 +34,12 @@ class SessionCode extends Model
     protected static function booted()
     {
         static::deleting(function(SessionCode $sessionCode) {
-            $sessionCode->guests()->delete();
+            $guests = $sessionCode->guests()->get();
+            foreach ($guests as $guest)
+            {
+                $guest->questions()->delete();
+                $guest->delete();
+            }
         });
     }
 }

@@ -33,7 +33,7 @@ const logout = () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('sessions')">
-                                    <ApplicationMark class="block" />
+                                    <ApplicationMark class="block h-12" />
                                 </Link>
                             </div>
 
