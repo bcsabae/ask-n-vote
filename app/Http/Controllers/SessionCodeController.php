@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Question;
 use App\Models\SessionCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
-use const http\Client\Curl\AUTH_ANY;
 
 class SessionCodeController extends Controller
 {
@@ -55,7 +53,14 @@ class SessionCodeController extends Controller
         if(Auth::user()->cannot('create', SessionCode::class)) abort(403);
 
         $validated = $request->validate([
-            "title" => "nullable|string|max:256"
+            "title" => [
+                "nullable",
+                "string",
+                "max:256",
+                Rule::unique('session_codes')->where(function ($query) {
+                    return $query->where('user_id', Auth::id());
+                })
+            ],
         ]);
 
         if (!array_key_exists('title', $validated))
