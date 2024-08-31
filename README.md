@@ -1,66 +1,74 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+![AskNVote](public/images/logo.png)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# AskNVote
 
-## About Laravel
+Welcome to AskNVote, a dynamic web application designed for users to ask questions and upvote the most relevant queries. Developed as a portfolio project, but deployable to production, AskNVote showcases modern web technologies and real-time interaction capabilities.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Project Goals
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+AskNVote aims to:
+- Provide a platform where users can interact by asking and voting on questions, for example in a webinar scenario
+- Implement session-based authentication for secure, temporary access for attendees
+- Use Laravel's strong authentication features with profile management and 2FA for admin users
+- Offer real-time updates to ensure users and admins see live, fresh data.
+- Include an admin dashboard for moderation and content management.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
+- **Crowdsourcing Information:** By allowing questions to rise by vote count, attendees can easily attach to important queries, while admins can prioritize their answers.
+- **User Authentication:** Secure attendee access via session codes. Attendees are remembered, no need to re-join session after closing the page.
+- **Question Management:** Ask new questions, vote on existing ones. Admins can see questions ordered by votes.
+- **Real-Time Updates:** Ensures that attendees as well as admins always seeing the latest data without manual page refreshes.
+- **Admin Dashboard:** Delete or mark questions as answered.
+- **Moderation Capabilities:** Admins can manage the content, ban malicious users, ensuring the quality and relevance of questions.
+- **Security:** Building on Laravel's world-class authentication and authorization features, the platform provides safe access, profile management, email confirmation, 2FA and more.
 
-## Learning Laravel
+## Technologies Used
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Laravel 11:** Backend framework for CRUD operations and authentication.
+- **Inertia.js:** Integrates Laravel and Vue.js for a smooth SPA experience, without the need of a frontend router.
+- **Vue.js with PrimeVue:** Frontend UI with dynamic components for a cohesive, consistent look. Dark and light modes are supported, fully responsive UI.
+- **Docker Compose with Sail:** Development environment, with local MariaDB instance, PhpMyAdmin and Mailpit services.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Getting Started
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Prerequisites
 
-## Laravel Sponsors
+- Ensure Docker is installed on your machine.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Installation
 
-### Premium Partners
+To run the development environment, use the following script:
+```bash
+git clone https://github.com/bcsabae/ask-n-vote.git
+cd ask-n-vote
+./vendor/bin/sail up -d
+./vendor/bin/sail composer install
+./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan db:seed
+./vendor/bin/sail npm install && ./vendor/bin/sail npm run dev
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+To build assets, simply run 
+```bash
+./vendor/bin/sail npm run build
+```
 
-## Contributing
+## Screenshots
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Here are some screenshots to give you an idea of the application:
 
-## Code of Conduct
+### Admin main dashboard.
+![Admin Dashboard](public/images/dashboard.png)  
+*Dashboard where admins can see, edit and actiate/inactivate sessions. Light mode, desktop.*
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Admin session dashboard.
+![Admin Dashboard](public/images/dashboard.png)  
+*Dashboard where admins can manage their ongoing sessions. Light mode, desktop.*
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### User Dashboard
+![Guest view](public/images/guest_view.png)  
+*Q&A attendee's view. Mobile screen.*
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This is a reference project. Please don't use it yourself. Ideas are welcome.
