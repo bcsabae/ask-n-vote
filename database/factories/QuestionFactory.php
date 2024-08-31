@@ -35,4 +35,13 @@ class QuestionFactory extends Factory
             ];
         });
     }
+
+    public function withZeroUpvotes(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'upvotes' => 0,
+            ];
+        });
+    }
 }

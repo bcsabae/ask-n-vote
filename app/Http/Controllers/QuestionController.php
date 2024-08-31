@@ -57,10 +57,15 @@ class QuestionController extends Controller
     {
         $shouldAllow = false;
 
-        if (Auth::id() == $question->sessionCode->user_id) $shouldAllow = true;
-
-        $guest = Guest::find(session("guest_id"));
-        if ($question->guest_id == $guest->id) $shouldAllow = true;
+        if (Auth::check())
+        {
+            if (Auth::id() == $question->sessionCode->user_id) $shouldAllow = true;
+        }
+        else
+        {
+            $guest = Guest::find(session("guest_id"));
+            if ($question->guest_id == $guest->id) $shouldAllow = true;
+        }
 
         if (!$shouldAllow) abort(403);
 
