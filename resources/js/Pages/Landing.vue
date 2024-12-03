@@ -1,8 +1,8 @@
 <script setup>
 import LandingLayout from "@/Layouts/LandingLayout.vue";
 import {onMounted, ref} from "vue";
-import CTA from "@/Components/CTA.vue";
 import FeatureCard from "@/Components/FeatureCard.vue";
+import {Link} from "@inertiajs/vue3";
 
 const words = [
     "Ask.",
@@ -81,7 +81,9 @@ onMounted(() => {
             </div>
         </div>
         <div class="flex justify-center w-full py-24">
-            <CTA :href="route('register')" text="join the platform - it's free!"/>
+            <Link :href="route('register')" class="rounded-full bg-secondary hover:bg-primary hover:shadow transition ease-in-out duration-300 px-4 py-2 text-black font-black tracking-wider uppercase">
+                join the platform - it's free!
+            </Link>
         </div>
 
 
@@ -136,7 +138,9 @@ onMounted(() => {
                     <p>No credit card required</p>
                 </div>
                 <div class="py-4 mt-4">
-                    <CTA :href="route('register')" text="Join now!"></CTA>
+                    <Link :href="route('register')" class="rounded-full bg-secondary hover:bg-primary hover:shadow transition ease-in-out duration-300 px-4 py-2 text-black font-black tracking-wider uppercase">
+                        Join now!
+                    </Link>
                 </div>
             </div>
         </div>
